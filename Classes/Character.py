@@ -3,10 +3,15 @@ import GUIs
 import Classes
 
 class Character():
-	def __init__(self,name):
+	def __init__(self,name,charDict = None):
 		self.name=name
 		self.cooldown = 0
 		self.busy = False
+		if charDict:
+			self.__equipment = charDict["equipment"]
+			self.stats = charDict["stats"]
+			self.skills = charDict["skills"]
+			self.hp = charDict["hp"]
 		self.__equipment= {
 			"main-hand" : "nothing",
 			"off-hand" : "nothing",

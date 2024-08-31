@@ -8,12 +8,19 @@ import math
 import random
 
 class Player():
-	def __init__(self,gui):
-		self.__inventory=[]
+	def __init__(self,gui,name,characters,gold=100,inventory=[]):
+		self.__inventory=inventory
+		self.__name = name
 		self.__gui = gui
-		self.__party = [Classes.Character.Character("Craig"),Classes.Character.Character("Dustin"),Classes.Character.Character("Jimmy"),Classes.Character.Character("Jonny")]
-		self.__gold = 100
+		self.__party = characters
+		self.__gold = gold
 		self.__CDScript = threading.Thread(target=Utility.GameTick.main,args=([self.__party]),daemon=True).start()
+
+	def getName(self):
+		return self.__name
+	
+	def getGold(self):
+		return self.__gold
 	
 	def viewInventory(self):
 		return copy.deepcopy(self.__inventory)
@@ -174,7 +181,14 @@ class Player():
 	def __addHP(self,selection,amount):
 		selection.addHP(amount)
 	
-	def __validChar(self,name,busy=True):
+	def checkBusy(self,name):
+		for i in range(0,len(self.__party)):
+			if self.__party[i].name == name:
+				if self.__party[i].busy:
+					return True
+		return False
+	
+	def __validChar(self,name):
 		character = None
 		for i in range(0,len(self.__party)):
 			if self.__party[i].name == name:
@@ -182,7 +196,7 @@ class Player():
 		if character == None:
 			self.__gui.updateOutputList("Cannot find character named '" + name + "'.")
 			return character
-		if character.busy and busy:
+		if character.busy:
 			self.__gui.updateOutputList(character.name + " is busy.")
 			return None
 		return character

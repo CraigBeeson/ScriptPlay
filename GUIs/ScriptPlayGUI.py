@@ -2,9 +2,9 @@ import tkinter
 import ctypes
 import Defs
 import GUIs
-from Classes import Player
 import copy
 import time
+import Utility
 
 user32 = ctypes.windll.user32
 #the main program gui
@@ -14,17 +14,17 @@ class ScriptPlayGUI:
 		self.root = tkinter.Tk()
 		self.root.minsize(500,500)
 		self.root.maxsize(ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1))
-		self.root.title("Holy Grail")
+		self.root.title("ScriptPlay")
 		#combat var
 		self.__combat = False
+		self.player = None
+		Utility.LoadMenu.PlayerConfig(self)
 		#creates player class
-		self.player = Player.Player(self)
 		#sets some submenu names
 		self.invMenu = None
 		self.services = None
 		self.partyMenu = None
-		#list for background services
-		self.serviceList = []
+		self.toolmenu = None
 		#upper and lower window frames
 		#lower for textoutput from the game
 		self.frame0 = None
@@ -49,6 +49,7 @@ class ScriptPlayGUI:
 		self.root.config(menu=menu)
 		#toolmenu added to root menu, nothing for tools yet
 		toolmenu = tkinter.Menu(menu,tearoff=False,background=Defs.bg,fg=Defs.fg,activebackground=Defs.bg)
+		self.toolmenu = GUIs.ToolGUI.ToolMenu(self,toolmenu)
 		menu.add_cascade(label='Tools', menu=toolmenu)
 		#adds the inventory menu
 		self.invMenu = GUIs.InventoryGUI.InvMenu(self,tkinter.Menu(menu,tearoff=False,background=Defs.bg,fg=Defs.fg,activebackground=Defs.bg))
@@ -61,6 +62,7 @@ class ScriptPlayGUI:
 		#background services menu
 		self.services = tkinter.Menu(menu,tearoff=False,background=Defs.bg,fg=Defs.fg,activebackground=Defs.bg)
 		menu.add_cascade(label="Services",menu=self.services)
+		GUIs.ServicesGUI.main(self,self.services)
 
 	def setFrames(self):
 		#upper frame
@@ -92,11 +94,7 @@ class ScriptPlayGUI:
 		if len(temp)==250:
 			temp[0].destroy()
 		self.outputList.insert("end",line)
-
-	#function for updating the background services list
-	def addService(self,service,serviceType):
-		self.serviceList.append([service,serviceType])
-		self.services.add_command(label=serviceType,command=lambda: GUIs.ServicesGUI.main(self,service,serviceType))
 	
 	def viewCombat(self):
 		return copy.copy(self.__combat)
+	
