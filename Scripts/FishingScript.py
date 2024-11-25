@@ -5,5 +5,5 @@ def main(player,charName,active):
 		if player.checkBusy(charName):
 			pass
 		else:
-			player.mine(charName)
+			player.fish(charName)
 		time.sleep(1)
