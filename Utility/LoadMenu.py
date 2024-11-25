@@ -7,10 +7,10 @@ import pickle
 class PlayerConfig:
 	def __init__(self,gui):
 		self.player = None
-		self.loadMenu = tkinter.Toplevel()
+		self.loadMenu = tkinter.Toplevel(gui.root)
 		self.loadMenu.title = "Load Player"
 		self.loadMenu.config(width = 300,height = 200,bg=Defs.bg)
-		playerName = tkinter.Entry(self.loadMenu,width = 25,bg=Defs.bg,fg=Defs.fg,insertbackground=Defs.fg)
+		playerName = tkinter.Entry(self.loadMenu,width = 25,bg=Defs.bg,fg=Defs.fg,insertbackground=Defs.fg,selectbackground=Defs.bg)
 		playerName.insert(0,"Enter Name")
 		playerName.pack()
 		loadButton = tkinter.Button(self.loadMenu,text="Load",command=lambda: handleText(gui,playerName.get(),self.loadMenu),bg=Defs.bg,fg=Defs.fg,activebackground=Defs.active)
