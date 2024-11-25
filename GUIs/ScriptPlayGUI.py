@@ -18,7 +18,9 @@ class ScriptPlayGUI:
 		#combat var
 		self.__combat = False
 		self.player = None
+		self.root.withdraw()
 		Utility.LoadMenu.PlayerConfig(self)
+		self.root.deiconify()
 		#creates player class
 		#sets some submenu names
 		self.invMenu = None
@@ -34,12 +36,6 @@ class ScriptPlayGUI:
 		#calls functions to set up the gui
 		self.setMenu()
 		self.setFrames()
-		#temp code to test scripting
-		#self.player.mine("Craig")
-		#self.player.fish("Dustin")
-		#self.player.forage("Jimmy")
-		#self.player.hunt("Jonny")
-		#self.player.mine("Craig")
 		
 	#this sets up the menu
 	def setMenu(self):
@@ -77,10 +73,10 @@ class ScriptPlayGUI:
 		scrollbar1 = tkinter.Scrollbar(self.frame1,orient="horizontal")
 		scrollbar1.pack(side = "bottom", fill = "x" )
 		#output displayed in the bottom frame goes inside this listbox
-		self.outputList = tkinter.Listbox(self.frame1,xscrollcommand=scrollbar1.set, yscrollcommand = scrollbar.set,bg=Defs.bg,fg=Defs.fg,name="output" )
+		self.outputList = tkinter.Listbox(self.frame1,xscrollcommand=scrollbar1.set, yscrollcommand = scrollbar.set,bg=Defs.bg,fg=Defs.fg,name="output",selectbackground=Defs.bg)
 		self.outputList.pack( side = "left", fill = "both",expand=True )
 		#configure scroll bars
-		scrollbar.config( command = self.outputList.yview )
+		scrollbar.config( command = self.outputList.yview)
 		scrollbar1.config(command=self.outputList.xview)
 
 	#this clears the display
@@ -94,6 +90,7 @@ class ScriptPlayGUI:
 		if len(temp)==250:
 			temp[0].destroy()
 		self.outputList.insert("end",line)
+		self.outputList.see(tkinter.END)
 	
 	def viewCombat(self):
 		return copy.copy(self.__combat)
